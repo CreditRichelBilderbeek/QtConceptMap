@@ -11,6 +11,11 @@ class qtconceptmap_test : public QObject
     Q_OBJECT //!OCLINT
 
 private slots:
+  void double_click();
+  void double_click_twice();
+
+  void change_modes();
+  void click();
   void create_one_edge_command();
   void create_one_edge_command_and_check_z_order();
   void create_one_edge_keyboard();
@@ -41,8 +46,21 @@ private slots:
   void delete_one_node_keyboard();
   void delete_two_nodes_command();
   void delete_two_nodes_keyboard();
+  void get_focusable_items();
+  void get_highlighter();
+  void hide_examples();
   void is_command_put_on_undo_stack();
   void issue_96();
+  void mouse_wheel();
+  void press_escape();
+  void press_f1();
+  void press_f2();
+  void press_f4();
+  void press_h();
+  void press_n();
+  void press_question_mark();
+  void press_t();
+  void press_z();
   void select_left_node_keyboard();
   void select_random_node_keyboard();
   void set_concept_maps();

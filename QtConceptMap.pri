@@ -23,9 +23,7 @@ HEADERS += \
     $$PWD/qtconceptmapmode.h \
     $$PWD/qtconceptmapnewarrow.h \
     $$PWD/qtconceptmapnodedialog.h \
-    $$PWD/qtconceptmapqtedgedialog.h \
     $$PWD/qtconceptmapqtedge.h \
-    $$PWD/qtconceptmapqtnodedialog.h \
     $$PWD/qtconceptmapqtnodefactory.h \
     $$PWD/qtconceptmapqtnode.h \
     $$PWD/qtconceptmaprateconceptdialog.h \
@@ -58,9 +56,7 @@ SOURCES += \
     $$PWD/qtconceptmapnewarrow.cpp \
     $$PWD/qtconceptmapnodedialog.cpp \
     $$PWD/qtconceptmapqtedge.cpp \
-    $$PWD/qtconceptmapqtedgedialog.cpp \
     $$PWD/qtconceptmapqtnode.cpp \
-    $$PWD/qtconceptmapqtnodedialog.cpp \
     $$PWD/qtconceptmapqtnodefactory.cpp \
     $$PWD/qtconceptmaprateconceptdialog.cpp \
     $$PWD/qtconceptmaprateconcepttallydialog.cpp \
@@ -76,8 +72,6 @@ FORMS += \
     $$PWD/qtconceptmapexampledialog.ui \
     $$PWD/qtconceptmapexamplesdialog.ui \
     $$PWD/qtconceptmapnodedialog.ui \
-    $$PWD/qtconceptmapqtedgedialog.ui \
-    $$PWD/qtconceptmapqtnodedialog.ui \
     $$PWD/qtconceptmaprateconceptdialog.ui \
     $$PWD/qtconceptmaprateconcepttallydialog.ui \
     $$PWD/qtconceptmapratedconceptdialog.ui \

@@ -7,6 +7,7 @@
 #include <cmath>
 #include <QApplication>
 #include <QMouseEvent>
+#include <QWheelEvent>
 #include <boost/graph/isomorphism.hpp>
 
 #include "conceptmapedgefactory.h"
@@ -23,10 +24,29 @@
 #include "qtconceptmapcommandtogglearrowtail.h"
 #include "qtconceptmapexamplesitem.h"
 #include "qtconceptmap.h"
+#include "qtconceptmapitemhighlighter.h"
 #include "qtconceptmaphelper.h"
 #include "qtconceptmapqtnode.h"
 #include "qtconceptmapqtnode.h"
 //#include "ribi_system.h"
+
+void ribi::cmap::qtconceptmap_test::change_modes()
+{
+  QtConceptMap m;
+  m.SetConceptMap(ConceptMapFactory().Get11());
+  m.SetMode(Mode::edit);
+  m.show();
+  m.SetMode(Mode::rate);
+  m.show();
+  m.SetMode(Mode::uninitialized);
+  m.show();
+}
+
+void ribi::cmap::qtconceptmap_test::click()
+{
+  QtConceptMap m;
+  QTest::mouseClick(m.viewport(), Qt::LeftButton);
+}
 
 void ribi::cmap::qtconceptmap_test::create_one_edge_command()
 {
@@ -228,7 +248,7 @@ void ribi::cmap::qtconceptmap_test::create_one_node_mouse()
 {
   QtConceptMap m;
   m.show();
-  QTest::mouseDClick(&m, Qt::MouseButton::LeftButton, 0, QPoint(0.0,0.0), 100);
+  QTest::mouseDClick(m.viewport(), Qt::MouseButton::LeftButton, 0, QPoint(0.0,0.0), 100);
   m.show();
   const int n_nodes_in_scene{static_cast<int>(Collect<QtNode>(m.GetScene()).size())};
   const int n_nodes_in_conceptmap{static_cast<int>(boost::num_vertices(m.GetConceptMap()))};
@@ -486,6 +506,58 @@ void ribi::cmap::qtconceptmap_test::delete_two_nodes_keyboard()
   QVERIFY(DoubleCheckSelectedEdgesAndNodes(m,0,0));
 }
 
+void ribi::cmap::qtconceptmap_test::double_click()
+{
+  QtConceptMap m;
+  m.show();
+  assert(boost::num_vertices(m.GetConceptMap()) == 0);
+  QTest::mouseDClick(m.viewport(), Qt::LeftButton);
+  QVERIFY(boost::num_vertices(m.GetConceptMap()) == 1);
+}
+
+void ribi::cmap::qtconceptmap_test::double_click_twice()
+{
+  QtConceptMap m;
+  m.show();
+  assert(boost::num_vertices(m.GetConceptMap()) == 0);
+  //Creates a new node
+  QTest::mouseDClick(m.viewport(), Qt::LeftButton);
+  m.show();
+  assert(boost::num_vertices(m.GetConceptMap()) == 1);
+  //Does not create a new node, as the double-click took place on an existing node
+  QTest::mouseDClick(m.viewport(), Qt::LeftButton);
+  m.show();
+  QVERIFY(boost::num_vertices(m.GetConceptMap()) == 1);
+}
+
+void ribi::cmap::qtconceptmap_test::get_focusable_items()
+{
+  //In rate mode, the center node cannot be focused on
+  QtConceptMap m;
+  m.SetConceptMap(ConceptMapFactory().Get11());
+  m.SetMode(Mode::edit);
+  assert(CountCenterNodes(m.GetConceptMap()) > 0);
+  const auto n_edit = GetFocusableItems(m).size();
+  m.SetMode(Mode::rate);
+  const auto n_rate = GetFocusableItems(m).size();
+  QVERIFY(n_rate < n_edit);
+}
+
+
+void ribi::cmap::qtconceptmap_test::get_highlighter()
+{
+  QtConceptMap m;
+  const auto& h = m.GetQtHighlighter();
+  //Nothing to highlight, thus not item
+  QVERIFY(!h.GetItem());
+}
+
+void ribi::cmap::qtconceptmap_test::hide_examples()
+{
+  QtConceptMap m;
+  HideExamplesItem(m);
+}
+
 void ribi::cmap::qtconceptmap_test::is_command_put_on_undo_stack()
 {
   QtConceptMap m;
@@ -517,7 +589,77 @@ void ribi::cmap::qtconceptmap_test::issue_96()
     QTest::keyClick(&m, Qt::Key_Space, Qt::NoModifier, 100);
     m.show();
   }
+}
 
+void ribi::cmap::qtconceptmap_test::mouse_wheel()
+{
+  QtConceptMap m;
+  m.show();
+  QWheelEvent e(QPoint(10,10), 10,Qt::NoButton,Qt::NoModifier);
+  m.wheelEvent(&e);
+}
+
+void ribi::cmap::qtconceptmap_test::press_escape()
+{
+  QtConceptMap m;
+  m.show();
+  QTest::keyClick(&m, Qt::Key_Escape);
+}
+
+void ribi::cmap::qtconceptmap_test::press_f1()
+{
+  QtConceptMap m;
+  m.show();
+  QTest::keyClick(&m, Qt::Key_F1);
+}
+
+void ribi::cmap::qtconceptmap_test::press_f2()
+{
+  QtConceptMap m;
+  m.show();
+  QTest::keyClick(&m, Qt::Key_F2);
+}
+
+void ribi::cmap::qtconceptmap_test::press_f4()
+{
+  QtConceptMap m;
+  m.show();
+  QTest::keyClick(&m, Qt::Key_F2);
+}
+
+void ribi::cmap::qtconceptmap_test::press_h()
+{
+  QtConceptMap m;
+  m.show();
+  QTest::keyClick(&m, Qt::Key_H, Qt::ControlModifier);
+}
+
+void ribi::cmap::qtconceptmap_test::press_n()
+{
+  QtConceptMap m;
+  m.show();
+  QTest::keyClick(&m, Qt::Key_N, Qt::ControlModifier);
+}
+
+void ribi::cmap::qtconceptmap_test::press_question_mark()
+{
+  QtConceptMap m;
+  m.show();
+  QTest::keyClick(&m, Qt::Key_Question);
+}
+
+void ribi::cmap::qtconceptmap_test::press_t()
+{
+  QtConceptMap m;
+  m.show();
+  QTest::keyClick(&m, Qt::Key_T, Qt::ControlModifier);
+}
+
+void ribi::cmap::qtconceptmap_test::press_z()
+{
+  QtConceptMap m;
+  m.show();
+  QTest::keyClick(&m, Qt::Key_Z, Qt::ControlModifier);
 }
 
 void ribi::cmap::qtconceptmap_test::select_left_node_keyboard()
